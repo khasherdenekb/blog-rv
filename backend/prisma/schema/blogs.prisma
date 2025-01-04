@@ -1,0 +1,10 @@
+model Blogs {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  content    String
+  authorId   String   @db.ObjectId
+  categoryId String   @db.ObjectId
+  createdAt  DateTime @default(now())
+  category   Category @relation(fields: [categoryId], references: [id])
+  author     User?    @relation(fields: [authorId], references: [id])
+}
