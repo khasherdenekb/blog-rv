@@ -21,7 +21,9 @@
     "paths": {
       "@controllers/*": ["controllers/*"],
       "@routers/*": ["routers/*"],
-      "@schema/*": ["schema/*"]
+      "@schema/*": ["schema/*"],
+      "@lib/*": ["lib/*"],
+      "@middleware/*": ["middleware/*"]
     }
   },
   "include": ["src/**/*.ts"],

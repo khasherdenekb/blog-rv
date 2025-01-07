@@ -2,21 +2,19 @@ import * as z from "zod";
 
 export const SignupSchema = z
   .object({
-    name: z.string().min(1, "Name is required"),
-    email: z.string().email("Invalid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
-    confirmPassword: z
-      .string()
-      .min(8, "Password confirmation must be at least 8 characters long"),
-    avatarUrl: z.string().url("Invalid URL").optional(),
+    username: z.string().nonempty(),
+    email: z.string().email(),
+    password: z.string().min(8).max(30),
+    confirmPassword: z.string().min(8).max(30),
+    avatarUrl: z.string().url().optional(),
     blogs: z
       .array(
         z.object({
-          title: z.string().min(1, "Title is required"),
-          content: z.string().min(1, "Content is required"),
-          authorId: z.string().min(1, "Author ID is required"),
-          id: z.string().min(1, "Blog ID is required"),
-          createdAt: z.string().datetime("Invalid date format"),
+          title: z.string().nonempty(),
+          content: z.string().nonempty(),
+          authorId: z.string().nonempty(),
+          id: z.string().nonempty(),
+          createdAt: z.string().datetime(),
         })
       )
       .optional()
