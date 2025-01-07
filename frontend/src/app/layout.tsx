@@ -1,10 +1,12 @@
 import "@/styles/globals.css";
 import { Metadata } from "next";
 
+import { cn } from "@/lib/utils";
+import { Toaster } from "sonner";
 import { siteConfig } from "@/config/site";
 import { fontMono, fontSans } from "@/lib/fonts";
-import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/theme-provider";
+import { ReactQueryProvider } from "@/providers/react-query-provider";
 
 export const metadata: Metadata = {
   title: {
@@ -73,21 +75,24 @@ export default function RootLayout({ children }: RootLayoutProps) {
           fontMono.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-          enableColorScheme
-        >
-          <div vaul-drawer-wrapper="">
-            <div className="relative flex min-h-svh flex-col bg-background">
-              {children}
+        <ReactQueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+            enableColorScheme
+          >
+            <Toaster richColors position="top-center" />
+            <div vaul-drawer-wrapper="">
+              <div className="relative flex min-h-svh flex-col bg-background">
+                {children}
+              </div>
             </div>
-          </div>
-          {/* <TailwindIndicator /> */}
-          {/* <DefaultToaster /> */}
-        </ThemeProvider>
+            {/* <TailwindIndicator /> */}
+            {/* <DefaultToaster /> */}
+          </ThemeProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );
