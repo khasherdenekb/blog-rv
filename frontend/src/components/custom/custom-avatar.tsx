@@ -7,22 +7,19 @@ type CustomAvatarProps = {
   imageAlt: string;
   author?: string;
   commentCount?: number;
+  avatarClassname?: string;
 };
 
-export function CustomAvatar({
-  fallback,
-  image,
-  author,
-  imageAlt,
-  commentCount,
-}: CustomAvatarProps) {
+export function CustomAvatar(props: Readonly<CustomAvatarProps>) {
+  const { fallback, image, author, imageAlt, commentCount, avatarClassname } =
+    props;
   return (
     <div className={"flex gap-2"}>
-      <Avatar>
+      <Avatar className={avatarClassname}>
         <AvatarImage src={image} alt={imageAlt} />
         <AvatarFallback>{fallback}</AvatarFallback>
       </Avatar>
-      {author ? (
+      {author && (
         <div className="flex flex-col">
           <p className="text-sm font-semibold">{author}</p>
           <div className="text-xs text-muted-foreground flex items-center gap-1">
@@ -32,8 +29,6 @@ export function CustomAvatar({
             <p>{commentCount} comments</p>
           </div>
         </div>
-      ) : (
-        <></>
       )}
     </div>
   );

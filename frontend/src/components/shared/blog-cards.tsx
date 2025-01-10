@@ -8,7 +8,7 @@ import { ArrowUpRightFromCircleIcon, CalendarDaysIcon } from "lucide-react";
 
 export const BlogCards = () => {
   return (
-    <>
+    <div>
       <Card className="h-full min-h-[400px]">
         <CardHeader className="p-0 h-48">
           <Image
@@ -53,7 +53,7 @@ export const BlogCards = () => {
             </div>
             <div className="pt-2 w-full">
               <Button variant={"outline"} className="w-full">
-                Read More
+                <p>Read More</p>
                 <span>
                   <ArrowUpRightFromCircleIcon className="w-3 h-3" />
                 </span>
@@ -62,6 +62,6 @@ export const BlogCards = () => {
           </CardFooter>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 };

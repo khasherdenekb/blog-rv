@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { type DialogProps } from "@radix-ui/react-dialog";
-import { Circle, File, Laptop, Moon, Sun } from "lucide-react";
+import { Circle, Laptop, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { docsConfig } from "@/config/docs";
 import { cn } from "@/lib/utils";
@@ -18,7 +18,7 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 
-export function CommandMenu({ ...props }: DialogProps) {
+export function CommandMenu({ ...props }: Readonly<DialogProps>) {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const { setTheme } = useTheme();
@@ -75,7 +75,7 @@ export function CommandMenu({ ...props }: DialogProps) {
                 key={navItem.href}
                 value={navItem.title}
                 onSelect={() => {
-                  runCommand(() => router.push(navItem.href as string));
+                  runCommand(() => router.push(navItem.href));
                 }}
               >
                 <Circle />

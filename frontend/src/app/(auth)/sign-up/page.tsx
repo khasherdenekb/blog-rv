@@ -19,7 +19,7 @@ const SignUpPage = () => {
       <div className="flex w-full max-w-sm flex-col gap-6">
         <a href="/" className="flex items-center gap-2 self-center font-medium">
           <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <Icons.logo className="p-1" />
+            <Icons.Logo className="p-1" />
           </div>
           {siteConfig.name}
         </a>
@@ -34,7 +34,7 @@ const SignUpPage = () => {
                 <div className="grid gap-6">
                   <div className="flex flex-col gap-4">
                     <Button variant="outline" className="w-full">
-                      <Icons.google />
+                      <Icons.Google />
                       Login with Google
                     </Button>
                   </div>

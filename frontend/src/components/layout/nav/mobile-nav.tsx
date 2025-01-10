@@ -74,7 +74,7 @@ function MobileLink({
   className,
   children,
   ...props
-}: MobileLinkProps) {
+}: Readonly<MobileLinkProps>) {
   const router = useRouter();
   return (
     <Link

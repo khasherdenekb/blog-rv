@@ -65,7 +65,7 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -84,10 +84,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
             enableColorScheme
           >
             <Toaster richColors position="top-center" />
-            <div vaul-drawer-wrapper="">
-              <div className="relative flex min-h-svh flex-col bg-background">
-                {children}
-              </div>
+            <div className="relative flex min-h-svh flex-col bg-background">
+              {children}
             </div>
             {/* <TailwindIndicator /> */}
             {/* <DefaultToaster /> */}
