@@ -26,6 +26,6 @@
       "@middleware/*": ["middleware/*"]
     }
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "../frontend/src/lib/auth-util.tsx"],
   "exclude": ["node_modules"]
 }

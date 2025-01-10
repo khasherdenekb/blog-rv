@@ -19,6 +19,9 @@ export const SignupSchema = z
       )
       .optional()
       .default([]),
+    role: z
+      .enum(["contributor", "admin", "editor", "author"])
+      .default("contributor"),
   })
   .superRefine((data, ctx) => {
     if (data.confirmPassword !== data.password) {

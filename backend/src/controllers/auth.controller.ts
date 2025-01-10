@@ -17,10 +17,12 @@ export const signUp: RequestHandler = async (req, res) => {
         username: parsedData.username,
         email: parsedData.email,
         password: hashedPassword,
+        role: parsedData?.role,
+        avatarUrl: parsedData?.avatarUrl,
       },
     });
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET!, {
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
       expiresIn: "14d",
     });
 
@@ -53,39 +55,17 @@ export const login: RequestHandler = async (req, res) => {
       return;
     }
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET!, {
+    const { password, id, ...newUser } = user;
+
+    const token = jwt.sign({ userId: user.id, user: newUser }, JWT_SECRET, {
       expiresIn: "14d",
     });
 
-    const { password, id, ...newUser } = user;
     res.status(200).json({
       message: "Login successfully",
       token,
-      user: newUser,
     });
   } catch (error) {
     res.status(500).json({ message: `Internal Server Error: ${error}` });
-  }
-};
-
-export const isValidToken: RequestHandler = (req, res) => {
-  const { token } = req.body;
-
-  if (!token) {
-    res.status(400).json({ message: "Token is missing" });
-    return;
-  }
-
-  try {
-    const decodedToken = jwt.verify(token, JWT_SECRET!);
-
-    if (!decodedToken) {
-      res.status(401).json({ message: "Invalid or expired token" });
-      return;
-    }
-
-    res.status(200).json({ message: "Token is valid" });
-  } catch (error) {
-    res.status(401).json({ message: "Invalid token" });
   }
 };

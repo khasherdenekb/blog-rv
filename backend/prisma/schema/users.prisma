@@ -4,6 +4,6 @@ model User {
   email     String  @unique
   password  String
   avatarUrl String?
-  roles     String  @default("contributor") //* admin editor author 
+  role      String  @default("contributor") //* admin editor author 
   blogs     Blogs[]
 }
