@@ -1,7 +1,5 @@
 "use client";
 
-import { useImageUpload } from "@/hooks/use-image-upload";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -10,27 +8,52 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useState } from "react";
+import { logout } from "@/lib/auth-util";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Check, ImagePlus, LogOut } from "lucide-react";
-import { useUser } from "@/hooks/use-user";
+import { Check, ImagePlus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { TUser, useUser } from "@/hooks/use-user";
+import { useImageUpload } from "@/hooks/use-image-upload";
 import { CustomAvatar } from "@/components/custom/custom-avatar";
-import { logout } from "@/lib/auth-util";
 
-export function UserDialog() {
+type UserDropdownMenuProps = {
+  setOpen: (open: boolean) => void;
+  user: TUser;
+};
+
+export function UserSection() {
+  const [open, setOpen] = useState(false);
   const { user } = useUser();
+
+  if (!user) return null;
+
   return (
-    <Dialog>
-      <DialogTrigger>
-        <CustomAvatar
-          fallback="KB"
-          image="https://s1.zerochan.net/Yagami.Light.600.4093947.jpg"
-          imageAlt="KB"
-          avatarClassname="w-8 h-8"
-        />
-      </DialogTrigger>
+    <div>
+      <UserDropdownMenu setOpen={setOpen} user={user} />
+      <UserDialog open={open} setOpen={setOpen} user={user} />
+    </div>
+  );
+}
+
+export function UserDialog(
+  props: Readonly<UserDropdownMenuProps & { open: boolean }>
+) {
+  const { open, setOpen, user } = props;
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-lg [&>button:last-child]:top-3.5">
         <DialogHeader className="contents space-y-0 text-left">
           <DialogTitle className="border-b border-border px-6 py-4 text-base">
@@ -79,15 +102,6 @@ export function UserDialog() {
                   />
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor={"logout"}>Logout</Label>
-                <div className="flex rounded-lg shadow-sm shadow-black/5">
-                  <Button onClick={logout} size={"sm"} variant={"destructive"}>
-                    <LogOut className="mr-1" />
-                    <p>Logout</p>
-                  </Button>
-                </div>
-              </div>
             </form>
           </div>
         </div>
@@ -103,6 +117,42 @@ export function UserDialog() {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function UserDropdownMenu(props: Readonly<UserDropdownMenuProps>) {
+  const { setOpen, user } = props;
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button size="icon" variant="outline" aria-label="Open account menu">
+          <CustomAvatar
+            fallback="KB"
+            image="https://s1.zerochan.net/Yagami.Light.600.4093947.jpg"
+            imageAlt="KB"
+            avatarClassname="w-8 h-8"
+          />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="max-w-64">
+        <DropdownMenuLabel className="flex flex-col">
+          <span>Signed in as</span>
+          <span className="text-xs font-normal text-foreground">
+            {user?.email}
+          </span>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem>Add blogs</DropdownMenuItem>
+          <DropdownMenuItem>My blogs</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpen(true)}>
+            Edit profile
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 

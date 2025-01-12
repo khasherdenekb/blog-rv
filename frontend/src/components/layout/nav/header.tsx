@@ -7,36 +7,36 @@ import { Icons } from "../../shared/icons";
 import { ModeSwitcher } from "../../shared/mode-switcher";
 import { CommandMenu } from "./command-menu";
 import { useUserServerSide } from "@/hooks/use-user-server";
-import { UserDialog } from "./user-dialog";
+import { UserSection } from "./user-dialog";
 
 export async function Header() {
   const { isAuthenticated } = await useUserServerSide();
   return (
     <header className="border-grid sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container-wrapper">
-        <div className="container flex h-14 items-center">
+        <div className="container flex items-center h-14">
           <MainNav />
           <MobileNav />
-          <div className="flex flex-1 items-center justify-between gap-2 md:justify-end">
-            <div className="w-full flex-1 md:w-auto md:flex-none">
+          <div className="flex items-center justify-between flex-1 gap-2 md:justify-end">
+            <div className="flex-1 w-full md:w-auto md:flex-none">
               <CommandMenu />
             </div>
             <nav className="flex items-center gap-0.5">
-              <Button variant="ghost" size="icon" className="h-8 w-8 px-0">
+              <Button variant="ghost" size="icon" className="w-8 h-8 px-0">
                 <Link
                   href={siteConfig.links.github}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <Icons.GitHub className="h-4 w-4" />
+                  <Icons.GitHub className="w-4 h-4" />
                   <span className="sr-only">GitHub</span>
                 </Link>
               </Button>
               <ModeSwitcher />
               {isAuthenticated ? (
-                <UserDialog />
+                <UserSection />
               ) : (
-                <div className="hidden md:flex gap-2">
+                <div className="hidden gap-2 md:flex">
                   <Button
                     asChild
                     size={"sm"}
