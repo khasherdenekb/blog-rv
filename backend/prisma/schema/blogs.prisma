@@ -2,9 +2,10 @@ model Blogs {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   title      String
   content    String
+  author     User     @relation(fields: [authorId], references: [id])
   authorId   String   @db.ObjectId
+  category   Category @relation(fields: [categoryId], references: [id])
   categoryId String   @db.ObjectId
   createdAt  DateTime @default(now())
-  category   Category @relation(fields: [categoryId], references: [id])
-  author     User?    @relation(fields: [authorId], references: [id])
+  updatedAt  DateTime @updatedAt
 }

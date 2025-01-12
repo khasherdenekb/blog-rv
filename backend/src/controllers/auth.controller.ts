@@ -27,6 +27,7 @@ export const signUp: RequestHandler = async (req, res) => {
     });
 
     res.status(201).json({ message: "User successfully registered", token });
+    return;
   } catch (error) {
     res.status(500).json({ message: `Internal Server Error: ${error}` });
   }
@@ -65,6 +66,7 @@ export const login: RequestHandler = async (req, res) => {
       message: "Login successfully",
       token,
     });
+    return;
   } catch (error) {
     res.status(500).json({ message: `Internal Server Error: ${error}` });
   }

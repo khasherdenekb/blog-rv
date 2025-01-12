@@ -1,9 +1,12 @@
 model User {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  username  String
-  email     String  @unique
-  password  String
-  avatarUrl String?
-  role      String  @default("contributor") //* admin editor author 
-  blogs     Blogs[]
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  username   String
+  email      String     @unique
+  password   String
+  avatarUrl  String?
+  role       String     @default("contributor") //* admin editor author 
+  blogs      Blogs[]
+  categories Category[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 }
