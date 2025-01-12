@@ -84,7 +84,7 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
             enableColorScheme
           >
             <Toaster richColors position="top-center" />
-            <div className="relative flex min-h-svh flex-col bg-background">
+            <div className="relative flex flex-col min-h-svh bg-background">
               {children}
             </div>
             {/* <TailwindIndicator /> */}

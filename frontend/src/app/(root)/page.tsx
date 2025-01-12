@@ -1,4 +1,5 @@
 "use client";
+import { PageBody } from "@/components/custom/page-body";
 import {
   PageHeader,
   PageHeaderDescription,
@@ -18,19 +19,15 @@ const Home = () => {
           eveniet voluptas.
         </PageHeaderDescription>
       </PageHeader>
-      <div id="blocks" className="border-grid scroll-mt-24 border-b">
-        <div className="container-wrapper">
-          <div className="container flex items-center py-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              <BlogCards />
-              <BlogCards />
-              <BlogCards />
-              <BlogCards />
-              <BlogCards />
-            </div>
-          </div>
+      <PageBody>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <BlogCards />
+          <BlogCards />
+          <BlogCards />
+          <BlogCards />
+          <BlogCards />
         </div>
-      </div>
+      </PageBody>
     </>
   );
 };
