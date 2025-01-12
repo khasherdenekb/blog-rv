@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/button";
 import { TUser, useUser } from "@/hooks/use-user";
 import { useImageUpload } from "@/hooks/use-image-upload";
 import { CustomAvatar } from "@/components/custom/custom-avatar";
+import Link from "next/link";
 
 type UserDropdownMenuProps = {
   setOpen: (open: boolean) => void;
@@ -55,8 +56,8 @@ export function UserDialog(
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-lg [&>button:last-child]:top-3.5">
-        <DialogHeader className="contents space-y-0 text-left">
-          <DialogTitle className="border-b border-border px-6 py-4 text-base">
+        <DialogHeader className="space-y-0 text-left contents">
+          <DialogTitle className="px-6 py-4 text-base border-b border-border">
             Edit profile
           </DialogTitle>
         </DialogHeader>
@@ -67,7 +68,7 @@ export function UserDialog(
         <div className="overflow-y-auto">
           <ProfileBg defaultImage="https://www.hostinger.com/tutorials/wp-content/uploads/sites/2/2022/03/what-is-a-blog-1.webp" />
           <Avatar defaultImage="https://s1.zerochan.net/Yagami.Light.600.4093947.jpg" />
-          <div className="px-6 pb-6 pt-4">
+          <div className="px-6 pt-4 pb-6">
             <form className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor={`username`}>{user?.username}</Label>
@@ -80,7 +81,7 @@ export function UserDialog(
                     type="text"
                     required
                   />
-                  <div className="pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-muted-foreground/80 peer-disabled:opacity-50">
+                  <div className="absolute inset-y-0 flex items-center justify-center pointer-events-none end-0 pe-3 text-muted-foreground/80 peer-disabled:opacity-50">
                     <Check
                       size={16}
                       strokeWidth={2}
@@ -96,7 +97,7 @@ export function UserDialog(
                   <Input
                     disabled
                     id={"email"}
-                    className="-ms-px rounded-s-none shadow-none"
+                    className="shadow-none -ms-px rounded-s-none"
                     value={user?.email}
                     type="text"
                   />
@@ -105,7 +106,7 @@ export function UserDialog(
             </form>
           </div>
         </div>
-        <DialogFooter className="border-t border-border px-6 py-4">
+        <DialogFooter className="px-6 py-4 border-t border-border">
           <DialogClose asChild>
             <Button type="button" variant="outline">
               Cancel
@@ -143,7 +144,9 @@ function UserDropdownMenu(props: Readonly<UserDropdownMenuProps>) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Add blogs</DropdownMenuItem>
+          <Link href={"/admin"}>
+            <DropdownMenuItem>Admin</DropdownMenuItem>
+          </Link>
           <DropdownMenuItem>My blogs</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>
             Edit profile
@@ -159,9 +162,9 @@ function UserDropdownMenu(props: Readonly<UserDropdownMenuProps>) {
 function ProfileBg({ defaultImage }: Readonly<{ defaultImage?: string }>) {
   return (
     <div className="h-32">
-      <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-muted">
+      <div className="relative flex items-center justify-center w-full h-full overflow-hidden bg-muted">
         <img
-          className="h-full w-full object-cover"
+          className="object-cover w-full h-full"
           src={defaultImage}
           alt={"Default profile background"}
           width={512}
@@ -180,11 +183,11 @@ function Avatar({ defaultImage }: Readonly<{ defaultImage?: string }>) {
 
   return (
     <div className="px-6 -mt-10">
-      <div className="relative flex size-20 items-center justify-center overflow-hidden rounded-full border-4 border-background bg-muted shadow-sm shadow-black/10">
+      <div className="relative flex items-center justify-center overflow-hidden border-4 rounded-full shadow-sm size-20 border-background bg-muted shadow-black/10">
         {currentImage && (
           <img
             src={currentImage}
-            className="h-full w-full object-cover"
+            className="object-cover w-full h-full"
             width={80}
             height={80}
             alt={currentImage}
@@ -192,7 +195,7 @@ function Avatar({ defaultImage }: Readonly<{ defaultImage?: string }>) {
         )}
         <button
           type="button"
-          className="absolute flex size-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white outline-offset-2 transition-colors hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70"
+          className="absolute flex items-center justify-center text-white transition-colors rounded-full cursor-pointer size-8 bg-black/60 outline-offset-2 hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70"
           onClick={handleThumbnailClick}
           aria-label="Change profile picture"
         >
