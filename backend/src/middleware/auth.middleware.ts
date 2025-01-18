@@ -1,7 +1,14 @@
 import jwt from "jsonwebtoken";
-import { RequestHandler } from "express";
+import { Response, NextFunction, Request } from "express";
+import { TUser } from "type/user";
 
-export const authenticateToken: RequestHandler = (req, res, next) => {
+const JWT_SECRET = process.env.JWT_SECRET;
+
+export const authenticateToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const authHeader = req.headers.authorization;
   let token = null;
 
@@ -11,16 +18,26 @@ export const authenticateToken: RequestHandler = (req, res, next) => {
 
   if (!token) {
     res.status(401).json({ message: "Unauthorized" });
-    return;
+  } else {
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+      if (err) {
+        res.status(403).json({ message: "Invalid or expired token" });
+      } else {
+        req.user = decoded;
+        next();
+      }
+    });
   }
+};
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      res.status(403).json({ message: "Invalid or expired token" });
-      return;
-    }
-
-    req.user = decoded;
+export const checkAdmin = (
+  req: Request & { user: TUser },
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.user?.user?.role !== "admin") {
+    res.status(401).json({ message: "Unauthorized" });
+  } else {
     next();
-  });
+  }
 };

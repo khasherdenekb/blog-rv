@@ -6,8 +6,6 @@ const app = express();
 const PORT = process.env.port || 8000;
 
 app.use(express.json());
-app.use("/auth", authRoutes);
-app.use(categoryRoutes);
 
 const useRoutes = (app: express.Application) => {
   app.use("/auth", authRoutes);

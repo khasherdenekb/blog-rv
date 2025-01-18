@@ -12,6 +12,7 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
+import { toast } from "sonner";
 
 export function CreateCategory() {
   const id = useId();
@@ -24,9 +25,15 @@ export function CreateCategory() {
   });
 
   const handleCreateCategory = async (values: TCategorySchema) => {
-    await addCategory({
+    const response = await addCategory({
       data: values,
     });
+    if (response?.status !== 200) {
+      toast.error(response?.data?.message);
+    } else {
+      toast.success(response?.data?.message);
+      form.reset();
+    }
   };
 
   return (
@@ -46,24 +53,26 @@ export function CreateCategory() {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
-                  <Input
-                    id={id}
-                    className="flex-1 shadow-none -me-px rounded-e-none focus-visible:z-10"
-                    placeholder="Category name..."
-                    {...field}
-                  />
+                  <div className="flex">
+                    <Input
+                      id={id}
+                      className="flex-1 shadow-none -me-px rounded-e-none focus-visible:z-10"
+                      placeholder="Category name..."
+                      {...field}
+                    />
+                    <button
+                      type="submit"
+                      className="inline-flex items-center px-3 text-sm font-medium transition-colors border rounded-e-lg border-input bg-background text-foreground outline-offset-2 hover:bg-accent hover:text-foreground focus:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70 disabled:cursor-not-allowed disabled:opacity-50
+                  "
+                    >
+                      Create
+                    </button>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-
-          <button
-            type="submit"
-            className="inline-flex items-center px-3 text-sm font-medium transition-colors border rounded-e-lg border-input bg-background text-foreground outline-offset-2 hover:bg-accent hover:text-foreground focus:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Create
-          </button>
         </form>
       </Form>
     </div>

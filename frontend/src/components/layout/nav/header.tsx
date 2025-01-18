@@ -21,7 +21,7 @@ export async function Header() {
             <div className="flex-1 w-full md:w-auto md:flex-none">
               <CommandMenu />
             </div>
-            <nav className="flex items-center gap-0.5">
+            <nav className="flex items-center gap-2">
               <Button variant="ghost" size="icon" className="w-8 h-8 px-0">
                 <Link
                   href={siteConfig.links.github}

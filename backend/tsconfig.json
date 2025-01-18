@@ -23,9 +23,10 @@
       "@routers/*": ["routers/*"],
       "@schema/*": ["schema/*"],
       "@lib/*": ["lib/*"],
-      "@middleware/*": ["middleware/*"]
+      "@middleware/*": ["middleware/*"],
+      "@type/*": ["type/*"]
     }
   },
-  "include": ["src/**/*.ts", "types/*.d.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }

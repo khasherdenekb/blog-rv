@@ -1,5 +1,5 @@
 "use server";
-import { axiosInstance } from "@/lib/auth-util";
+import { axiosInstance } from "@/lib/axios-instance";
 import { cookies } from "next/headers";
 
 type loginProps = {

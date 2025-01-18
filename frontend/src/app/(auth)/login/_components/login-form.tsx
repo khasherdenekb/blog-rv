@@ -38,7 +38,7 @@ export const LoginForm = () => {
     const result = await login({ data });
     if (result.status === 200) {
       form.reset();
-      toast.success(result.message);
+      toast.success(result.data?.message);
       localStorage.setItem("user", JSON.stringify(result?.data?.user));
       setTimeout(() => {
         router.push("/");

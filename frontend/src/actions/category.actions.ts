@@ -1,6 +1,6 @@
 "use server";
 
-import { axiosInstance } from "@/lib/auth-util";
+import { axiosInstance } from "@/lib/axios-instance";
 
 type loginProps = {
   data: {

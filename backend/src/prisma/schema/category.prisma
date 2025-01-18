@@ -1,6 +1,6 @@
 model Category {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
+  name      String   @unique
   userId    String   @db.ObjectId
   user      User     @relation(fields: [userId], references: [id])
   blogs     Blogs[]

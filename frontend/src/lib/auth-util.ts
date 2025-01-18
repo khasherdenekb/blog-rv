@@ -1,21 +1,11 @@
 "use server";
-import axios from "axios";
 import { cookies } from "next/headers";
-import { BACKEND_URL } from "@/config/constant";
+import { axiosInstance } from "./axios-instance";
 
 export const logout = async () => {
   const cookieStore = await cookies();
   cookieStore.delete("token");
 };
-
-export const axiosInstance = axios.create({
-  baseURL: BACKEND_URL,
-  validateStatus: (status) => status >= 200 && status < 500,
-  timeout: 30000,
-  headers: {
-    Authorization: `Bearer `,
-  },
-});
 
 axiosInstance.interceptors.request.use(
   async (config) => {
