@@ -1,3 +1,4 @@
+"use server";
 import { cookies } from "next/headers";
 import { TUserFullInfo } from "./use-user";
 import { jwtDecode } from "jwt-decode";

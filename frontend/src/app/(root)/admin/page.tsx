@@ -7,9 +7,12 @@ import {
 } from "@/components/custom/page-header";
 import { AdminPageContents } from "./_components/admin-page-contents";
 import { getCategory } from "@/actions/category.actions";
+import { checkAdmin } from "@/lib/auth-util";
+import { redirect } from "next/navigation";
 
 const AdminPage = async () => {
   const categories = await getCategory();
+  if (!checkAdmin) return redirect("/");
   return (
     <div>
       <PageHeader>
