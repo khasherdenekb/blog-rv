@@ -26,7 +26,7 @@ import { Check, ImagePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TUser, useUser } from "@/hooks/use-user";
 import { useImageUpload } from "@/hooks/use-image-upload";
-import { CustomAvatar } from "@/components/custom/custom-avatar";
+import { CustomAvatar } from "@/components/layout/custom/custom-avatar";
 import Link from "next/link";
 
 type UserDropdownMenuProps = {

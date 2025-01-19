@@ -2,6 +2,7 @@ model Blogs {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   title      String
   content    String
+  coverImage String
   author     User     @relation(fields: [authorId], references: [id])
   authorId   String   @db.ObjectId
   category   Category @relation(fields: [categoryId], references: [id])

@@ -24,8 +24,11 @@
   },
   "dependencies": {
     "@prisma/client": "^6.2.1",
+    "@types/formidable": "^3.4.5",
     "bcrypt": "^5.1.1",
+    "cloudinary": "^2.5.1",
     "express": "^4.21.2",
+    "formidable": "^3.5.2",
     "jsonwebtoken": "^9.0.2",
     "tsconfig-paths": "^4.2.0",
     "zod": "^3.24.1"

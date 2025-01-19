@@ -1,18 +1,19 @@
-import { PageBody } from "@/components/custom/page-body";
+import { PageBody } from "@/components/layout/custom/page-body";
 
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/custom/page-header";
+} from "@/components/layout/custom/page-header";
 import { AdminPageContents } from "./_components/admin-page-contents";
 import { getCategory } from "@/actions/category.actions";
 import { checkAdmin } from "@/lib/auth-util";
 import { redirect } from "next/navigation";
 
 const AdminPage = async () => {
-  const categories = await getCategory();
+  const { data } = await getCategory();
   if (!checkAdmin) return redirect("/");
+
   return (
     <div>
       <PageHeader>
@@ -24,7 +25,7 @@ const AdminPage = async () => {
         </PageHeaderDescription>
       </PageHeader>
       <PageBody>
-        <AdminPageContents categories={categories?.data} />
+        <AdminPageContents categories={data} />
       </PageBody>
     </div>
   );

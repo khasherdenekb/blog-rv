@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { CustomAvatar } from "../custom/custom-avatar";
+import { CustomAvatar } from "../layout/custom/custom-avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { ArrowUpRightFromCircleIcon, CalendarDaysIcon } from "lucide-react";
 

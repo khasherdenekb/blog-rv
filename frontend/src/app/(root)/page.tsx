@@ -1,10 +1,10 @@
 "use client";
-import { PageBody } from "@/components/custom/page-body";
+import { PageBody } from "@/components/layout/custom/page-body";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/custom/page-header";
+} from "@/components/layout/custom/page-header";
 import { BlogCards } from "@/components/shared/blog-cards";
 
 const Home = () => {
