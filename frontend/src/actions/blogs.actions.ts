@@ -1,15 +1,18 @@
 "use server";
 import { axiosInstance } from "@/lib/axios-instance";
 
-type loginProps = {
+type createBlogProps = {
   data: {
-    name: string;
+    title: string;
+    content: string;
+    coverImage: string;
+    categoryId: string;
   };
 };
 
-export const getCategory = async () => {
+export const getBlogs = async () => {
   try {
-    const response = await axiosInstance.get(`/category`);
+    const response = await axiosInstance.get(`/blogs`);
     return {
       status: response?.status,
       data: response?.data,
@@ -19,9 +22,9 @@ export const getCategory = async () => {
   }
 };
 
-export const addCategory = async ({ data }: loginProps) => {
+export const createBlog = async ({ data }: createBlogProps) => {
   try {
-    const response = await axiosInstance.post(`/category`, {
+    const response = await axiosInstance.post(`/blogs`, {
       ...data,
     });
     return {

@@ -20,17 +20,35 @@ export const createBlog = async (
   res: Response
 ): Promise<void> => {
   try {
-    const parsedData = BlogSchema.parse(req.body);
-    await prisma.blogs.create({
-      data: {
-        title: parsedData.title,
-        content: parsedData.content,
-        coverImage: parsedData.coverImage,
-        authorId: req.user.userId,
-        categoryId: parsedData.category,
+    const category = await prisma.category.findUnique({
+      where: {
+        name: req.body.categoryId,
       },
     });
-    res.status(201).json({ message: "Blog successfully created" });
+
+    if (!category) {
+      res.status(400).json({ message: "Category not found" });
+    } else {
+      const dataToParse = {
+        ...req.body,
+        authorId: req.user.userId,
+        category: category.id,
+      };
+
+      const parsedData = BlogSchema.parse(dataToParse);
+
+      await prisma.blogs.create({
+        data: {
+          title: parsedData.title,
+          content: parsedData.content,
+          coverImage: parsedData.coverImage,
+          authorId: parsedData.authorId,
+          categoryId: parsedData.category,
+        },
+      });
+
+      res.status(201).json({ message: "Blog successfully created" });
+    }
   } catch (error) {
     if (error instanceof ZodError) {
       res.status(400).json({ message: error.errors });

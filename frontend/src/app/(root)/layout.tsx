@@ -7,7 +7,7 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: Readonly<AppLayoutProps>) {
   return (
-    <div data-wrapper="" className="border-grid flex flex-1 flex-col">
+    <div className="border-grid flex flex-1 flex-col">
       <Header />
       <main className="flex flex-1 flex-col">{children}</main>
       <Footer />
