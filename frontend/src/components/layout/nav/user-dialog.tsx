@@ -28,6 +28,20 @@ import { TUser, useUser } from "@/hooks/use-user";
 import { useImageUpload } from "@/hooks/use-image-upload";
 import { CustomAvatar } from "@/components/layout/custom/custom-avatar";
 import Link from "next/link";
+import { updateUserProfile } from "@/actions/users.actions";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useForm, UseFormReturn } from "react-hook-form";
+import { TUsersSchema, usersSchema } from "@/schemas/users.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { handleUploadFile } from "@/lib/file-util";
+import { toast } from "sonner";
 
 type UserDropdownMenuProps = {
   setOpen: (open: boolean) => void;
@@ -53,6 +67,34 @@ export function UserDialog(
 ) {
   const { open, setOpen, user } = props;
 
+  const form = useForm<TUsersSchema>({
+    resolver: zodResolver(usersSchema),
+    defaultValues: {
+      username: user.username,
+      avatarUrl: user.avatarUrl,
+    },
+  });
+
+  const onSubmit = async () => {
+    const avatarUrl = await handleUploadFile(form.getValues().avatarUrl);
+    const result = await updateUserProfile({
+      data: {
+        avatarUrl,
+        username: form.getValues().username,
+      },
+    });
+    if (result?.status === 200) {
+      toast.success(result?.data?.message);
+      if (avatarUrl) {
+        user.avatarUrl = avatarUrl;
+      }
+      user.username = form.getValues().username;
+      setOpen(false);
+    } else {
+      toast.error(result?.data?.message);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="flex flex-col gap-0 overflow-y-visible p-0 sm:max-w-lg [&>button:last-child]:top-3.5">
@@ -67,43 +109,60 @@ export function UserDialog(
         </DialogDescription>
         <div className="overflow-y-auto">
           <ProfileBg defaultImage="https://www.hostinger.com/tutorials/wp-content/uploads/sites/2/2022/03/what-is-a-blog-1.webp" />
-          <Avatar defaultImage="https://s1.zerochan.net/Yagami.Light.600.4093947.jpg" />
+          <Avatar form={form} defaultImage={form.getValues().avatarUrl} />
           <div className="px-6 pt-4 pb-6">
-            <form className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor={`username`}>{user?.username}</Label>
-                <div className="relative">
-                  <Input
-                    id={`username`}
-                    className="peer pe-9"
-                    placeholder="Username"
-                    defaultValue="Khash-Erdene Bolor-Erdene"
-                    type="text"
-                    required
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
+                <div className="space-y-2">
+                  <FormField
+                    control={form.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel htmlFor={`username`}>
+                          {user?.username}
+                        </FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              id={`username`}
+                              className="peer pe-9"
+                              placeholder="Username"
+                              type="text"
+                              {...field}
+                            />
+                            <div className="absolute inset-y-0 flex items-center justify-center pointer-events-none end-0 pe-3 text-muted-foreground/80 peer-disabled:opacity-50">
+                              <Check
+                                size={16}
+                                strokeWidth={2}
+                                className="text-emerald-500"
+                                aria-hidden="true"
+                              />
+                            </div>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  <div className="absolute inset-y-0 flex items-center justify-center pointer-events-none end-0 pe-3 text-muted-foreground/80 peer-disabled:opacity-50">
-                    <Check
-                      size={16}
-                      strokeWidth={2}
-                      className="text-emerald-500"
-                      aria-hidden="true"
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor={"email"}>Email</Label>
+                  <div className="flex rounded-lg shadow-sm shadow-black/5">
+                    <Input
+                      disabled
+                      id={"email"}
+                      className="shadow-none -ms-px rounded-s-none"
+                      value={user?.email}
+                      type="text"
                     />
                   </div>
                 </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor={"email"}>Email</Label>
-                <div className="flex rounded-lg shadow-sm shadow-black/5">
-                  <Input
-                    disabled
-                    id={"email"}
-                    className="shadow-none -ms-px rounded-s-none"
-                    value={user?.email}
-                    type="text"
-                  />
-                </div>
-              </div>
-            </form>
+              </form>
+            </Form>
           </div>
         </div>
         <DialogFooter className="px-6 py-4 border-t border-border">
@@ -112,9 +171,12 @@ export function UserDialog(
               Cancel
             </Button>
           </DialogClose>
-          <DialogClose asChild>
-            <Button type="button">Save changes</Button>
-          </DialogClose>
+          <Button
+            disabled={form.formState.isSubmitting}
+            onClick={form.handleSubmit(onSubmit)}
+          >
+            Save changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -129,8 +191,8 @@ function UserDropdownMenu(props: Readonly<UserDropdownMenuProps>) {
         <Button size="icon" variant="outline" aria-label="Open account menu">
           <CustomAvatar
             fallback="KB"
-            image="https://s1.zerochan.net/Yagami.Light.600.4093947.jpg"
-            imageAlt="KB"
+            image={user.avatarUrl ?? ""}
+            imageAlt={`${user.username[0]}${user.username[1]}`}
             avatarClassname="w-8 h-8"
           />
         </Button>
@@ -175,7 +237,10 @@ function ProfileBg({ defaultImage }: Readonly<{ defaultImage?: string }>) {
   );
 }
 
-function Avatar({ defaultImage }: Readonly<{ defaultImage?: string }>) {
+function Avatar({
+  defaultImage,
+  form,
+}: Readonly<{ defaultImage?: string; form: UseFormReturn<TUsersSchema> }>) {
   const { previewUrl, fileInputRef, handleThumbnailClick, handleFileChange } =
     useImageUpload();
 
@@ -204,11 +269,19 @@ function Avatar({ defaultImage }: Readonly<{ defaultImage?: string }>) {
         <input
           type="file"
           ref={fileInputRef}
-          onChange={handleFileChange}
+          onChange={(e) => {
+            handleFileChange(e);
+            form.setValue("avatarUrl", e.target.files?.[0]);
+          }}
           className="hidden"
           accept="image/*"
           aria-label="Upload profile picture"
         />
+        {form.formState.errors.avatarUrl && (
+          <p className="text-destructive text-[13px] font-medium">
+            {form.formState.errors.avatarUrl.message as string}
+          </p>
+        )}
       </div>
     </div>
   );

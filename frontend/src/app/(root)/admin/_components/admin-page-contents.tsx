@@ -3,10 +3,9 @@ import { CreateCategory } from "@/components/blogs/create-category";
 import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
 import { Button } from "@/components/ui/button";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import React, { useId, useState } from "react";
+import React, { useId } from "react";
 import { SelectNative } from "@/components/ui/select-native";
 import { Input } from "@/components/ui/input";
-import { uploadImage } from "@/actions/uploader.actions";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,13 +21,13 @@ import {
 import { createBlog } from "@/actions/blogs.actions";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { handleUploadFile } from "@/lib/file-util";
 
 type AdminPageContentsProps = {
   categories: { name: string }[];
 };
 
 export const AdminPageContents = (props: AdminPageContentsProps) => {
-  const [file, setFile] = useState<File | undefined>(undefined);
   const { categories } = props;
   const id = useId();
 
@@ -43,21 +42,12 @@ export const AdminPageContents = (props: AdminPageContentsProps) => {
     },
   });
 
-  const handleUploadFile = async () => {
-    if (file) {
-      const response = await uploadImage(file);
-      return response?.data?.url;
-    } else {
-      return null;
-    }
-  };
-
   const onSubmit = async (data: TBlogSchema) => {
     if (!data.coverImage) {
       return;
     }
 
-    const image = await handleUploadFile();
+    const image = await handleUploadFile(form.getValues().coverImage);
     if (!image) {
       return;
     }
@@ -122,7 +112,6 @@ export const AdminPageContents = (props: AdminPageContentsProps) => {
                 type="file"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
-                  setFile(file);
                   form.setValue("coverImage", file);
                 }}
                 accept="image/*"
@@ -136,7 +125,7 @@ export const AdminPageContents = (props: AdminPageContentsProps) => {
             {/* Cover image end */}
           </div>
           {/* Subtitle start */}
-          <div className="space-y-2 py-5">
+          <div className="py-5 space-y-2">
             <FormControl>
               <FormField
                 control={form.control}
@@ -181,7 +170,7 @@ export const AdminPageContents = (props: AdminPageContentsProps) => {
           </TooltipProvider>
           <Button
             disabled={form.formState.isSubmitting}
-            className="mt-5 flex w-full"
+            className="flex w-full mt-5"
             type="submit"
           >
             Submit

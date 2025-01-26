@@ -1,15 +1,9 @@
 "use server";
 import { axiosInstance } from "@/lib/axios-instance";
+import { TAuthSchema } from "@/schemas/auth.schema";
 import { cookies } from "next/headers";
 
-type loginProps = {
-  data: {
-    email: string;
-    password: string;
-  };
-};
-
-export const login = async ({ data }: loginProps) => {
+export const login = async ({ data }: { data: TAuthSchema }) => {
   try {
     const cookieStore = await cookies();
     const response = await axiosInstance.post(`/auth/login`, {

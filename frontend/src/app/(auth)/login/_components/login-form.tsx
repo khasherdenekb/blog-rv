@@ -40,9 +40,7 @@ export const LoginForm = () => {
       form.reset();
       toast.success(result.data?.message);
       localStorage.setItem("user", JSON.stringify(result?.data?.user));
-      setTimeout(() => {
-        router.push("/");
-      }, 1500);
+      router.push("/");
     } else {
       toast.error(result.message);
     }
@@ -114,6 +112,7 @@ export const LoginForm = () => {
                   />
                 </div>
                 <Button
+                  disabled={form.formState.isSubmitting}
                   type="submit"
                   className="w-full bg-blue-500 hover:bg-blue-400"
                   effect={"gooeyRight"}

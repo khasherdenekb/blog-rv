@@ -1,14 +1,6 @@
 "use server";
 import { axiosInstance } from "@/lib/axios-instance";
-
-type createBlogProps = {
-  data: {
-    title: string;
-    content: string;
-    coverImage: string;
-    categoryId: string;
-  };
-};
+import { TBlogSchema } from "@/schemas/blog.schema";
 
 export const getBlogs = async () => {
   try {
@@ -22,7 +14,7 @@ export const getBlogs = async () => {
   }
 };
 
-export const createBlog = async ({ data }: createBlogProps) => {
+export const createBlog = async ({ data }: { data: TBlogSchema }) => {
   try {
     const response = await axiosInstance.post(`/blogs`, {
       ...data,

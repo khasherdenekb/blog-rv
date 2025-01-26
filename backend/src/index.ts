@@ -3,6 +3,7 @@ import authRoutes from "@routers/auth.router";
 import categoryRoutes from "@routers/category.router";
 import uploaderRoutes from "@routers/uploader.router";
 import blogRoutes from "@routers/blog.router";
+import userRoutes from "@routers/users.router";
 
 const app = express();
 const PORT = process.env.port || 8000;
@@ -14,6 +15,7 @@ const useRoutes = (app: express.Application) => {
   app.use(uploaderRoutes);
   app.use(categoryRoutes);
   app.use(blogRoutes);
+  app.use(userRoutes);
 };
 
 useRoutes(app);
