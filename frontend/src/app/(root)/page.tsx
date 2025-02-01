@@ -1,4 +1,4 @@
-"use client";
+import { getBlogs } from "@/actions/blogs.actions";
 import { PageBody } from "@/components/layout/custom/page-body";
 import {
   PageHeader,
@@ -7,7 +7,23 @@ import {
 } from "@/components/layout/custom/page-header";
 import { BlogCards } from "@/components/shared/blog-cards";
 
-const Home = () => {
+export type TBlog = {
+  title: string;
+  coverImage: string;
+  content: string;
+  description: string;
+  createdAt: string;
+  author: {
+    username: string;
+    avatarUrl: string;
+  };
+  category: {
+    name: string;
+  };
+};
+
+const Home = async () => {
+  const { data: blogData } = await getBlogs();
   return (
     <>
       <PageHeader>
@@ -21,11 +37,9 @@ const Home = () => {
       </PageHeader>
       <PageBody>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          <BlogCards />
-          <BlogCards />
-          <BlogCards />
-          <BlogCards />
-          <BlogCards />
+          {blogData?.map((blog: TBlog) => (
+            <BlogCards blog={blog} key={blog.title} />
+          ))}
         </div>
       </PageBody>
     </>

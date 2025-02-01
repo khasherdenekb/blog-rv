@@ -8,7 +8,7 @@ import userRoutes from "@routers/users.router";
 const app = express();
 const PORT = process.env.port || 8000;
 
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 
 const useRoutes = (app: express.Application) => {
   app.use("/auth", authRoutes);

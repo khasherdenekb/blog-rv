@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Check, ImagePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { TUser, useUser } from "@/hooks/use-user";
+import { TUser, UseUser } from "@/hooks/use-user";
 import { useImageUpload } from "@/hooks/use-image-upload";
 import { CustomAvatar } from "@/components/layout/custom/custom-avatar";
 import Link from "next/link";
@@ -50,22 +50,29 @@ type UserDropdownMenuProps = {
 
 export function UserSection() {
   const [open, setOpen] = useState(false);
-  const { user } = useUser();
+  const { user, updateUser } = UseUser();
 
   if (!user) return null;
 
   return (
     <div>
       <UserDropdownMenu setOpen={setOpen} user={user} />
-      <UserDialog open={open} setOpen={setOpen} user={user} />
+      <UserDialog
+        open={open}
+        setOpen={setOpen}
+        user={user}
+        updateUser={updateUser}
+      />
     </div>
   );
 }
 
 export function UserDialog(
-  props: Readonly<UserDropdownMenuProps & { open: boolean }>
+  props: Readonly<
+    UserDropdownMenuProps & { open: boolean; updateUser: (user: TUser) => void }
+  >
 ) {
-  const { open, setOpen, user } = props;
+  const { open, setOpen, user, updateUser } = props;
 
   const form = useForm<TUsersSchema>({
     resolver: zodResolver(usersSchema),
@@ -85,11 +92,13 @@ export function UserDialog(
     });
     if (result?.status === 200) {
       toast.success(result?.data?.message);
-      if (avatarUrl) {
-        user.avatarUrl = avatarUrl;
-      }
-      user.username = form.getValues().username;
       setOpen(false);
+      const updatedUser = {
+        ...user,
+        username: form.getValues().username,
+        avatarUrl: avatarUrl || user.avatarUrl,
+      };
+      updateUser(updatedUser);
     } else {
       toast.error(result?.data?.message);
     }
@@ -191,8 +200,8 @@ function UserDropdownMenu(props: Readonly<UserDropdownMenuProps>) {
         <Button size="icon" variant="outline" aria-label="Open account menu">
           <CustomAvatar
             fallback="KB"
-            image={user.avatarUrl ?? ""}
-            imageAlt={`${user.username[0]}${user.username[1]}`}
+            image={user?.avatarUrl ?? ""}
+            imageAlt={`${user?.username?.[0]}${user?.username?.[1]}`}
             avatarClassname="w-8 h-8"
           />
         </Button>

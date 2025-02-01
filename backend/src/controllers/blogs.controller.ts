@@ -8,7 +8,22 @@ const prisma = new PrismaClient();
 
 export const getBlogs = async (req: Request, res: Response): Promise<void> => {
   try {
-    const blogs = await prisma.blogs.findMany();
+    const blogs = await prisma.blogs.findMany({
+      include: {
+        author: {
+          select: {
+            username: true,
+            avatarUrl: true,
+          },
+        },
+        category: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+    console.log(blogs);
     res.status(200).json(blogs);
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
@@ -50,6 +65,7 @@ export const createBlog = async (
       res.status(201).json({ message: "Blog successfully created" });
     }
   } catch (error) {
+    console.log(`error: ${error}`);
     if (error instanceof ZodError) {
       res.status(400).json({ message: error.errors });
     } else {

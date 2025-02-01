@@ -6,11 +6,9 @@ import { Button } from "../../ui/button";
 import { Icons } from "../../shared/icons";
 import { ModeSwitcher } from "../../shared/mode-switcher";
 import { CommandMenu } from "./command-menu";
-import { useUserServerSide } from "@/hooks/use-user-server";
-import { UserSection } from "./user-dialog";
+import { MainButtons } from "./main-buttons";
 
 export async function Header() {
-  const { isAuthenticated } = await useUserServerSide();
   return (
     <header className="border-grid sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container-wrapper">
@@ -33,28 +31,7 @@ export async function Header() {
                 </Link>
               </Button>
               <ModeSwitcher />
-              {isAuthenticated ? (
-                <UserSection />
-              ) : (
-                <div className="hidden gap-2 md:flex">
-                  <Button
-                    asChild
-                    size={"sm"}
-                    effect={"shine"}
-                    className="bg-blue-500 hover:bg-blue-600"
-                  >
-                    <Link href="/login">Login</Link>
-                  </Button>
-                  <Button
-                    asChild
-                    variant={"outline"}
-                    size={"sm"}
-                    effect={"hoverUnderline"}
-                  >
-                    <Link href="/sign-up">Sign up</Link>
-                  </Button>
-                </div>
-              )}
+              <MainButtons />
             </nav>
           </div>
         </div>
